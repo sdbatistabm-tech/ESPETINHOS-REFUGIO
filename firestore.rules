@@ -1,0 +1,35 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function ehAdmin() {
+      return request.auth != null;
+    }
+
+    match /produtos/{produtoId} {
+      allow read: if true;
+      allow create, update, delete: if ehAdmin();
+    }
+
+    match /pedidos/{pedidoId} {
+      allow create: if request.resource.data.keys().hasAll([
+        'clienteNome', 'clienteWhatsapp', 'clienteWhatsappNormalizado',
+        'itens', 'totalUnidades', 'tipoEntrega', 'valorTotal', 'status'
+      ]) && request.resource.data.status == 'Novo';
+
+      allow read: if ehAdmin();
+      allow update: if ehAdmin();
+      allow delete: if false;
+    }
+
+    match /configuracoes/{docId} {
+      allow read: if true;
+      allow write: if ehAdmin();
+    }
+
+    match /adminTokens/{uid} {
+      allow read, write: if ehAdmin() && request.auth.uid == uid;
+    }
+  }
+}
