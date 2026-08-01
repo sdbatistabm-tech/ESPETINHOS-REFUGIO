@@ -14,13 +14,15 @@ export const seedProducts = [
   { nome: 'Frango com Queijo', categoria: 'Variados', peso: null, preco: 7.5, ordem: 13 },
   { nome: 'Carne com Queijo', categoria: 'Variados', peso: null, preco: 7.5, ordem: 14 },
   { nome: 'Romeu e Julieta', categoria: 'Variados', peso: null, preco: 7.5, ordem: 15 },
-];
+].map((p) => ({ ...p, ativo: true, imagemUrl: null }));
 
 export const seedConfig = {
   pedidoMinimoUnidades: 50,
-  taxaEntrega: 10,
-  whatsappNumero: '',
+  taxaEntrega: 10.0,
+  whatsappNumero: '5551999999999',
   chavePix: '',
   nomeTitularPix: 'Refúgio Distribuidora',
   observacaoPagamento: 'Forma de pagamento: 50% de entrada + 50% na entrega',
 };
+
+export const STATUS_PEDIDO = ['Novo', 'Em preparo', 'Pronto', 'Entregue', 'Cancelado', 'Pago'];
