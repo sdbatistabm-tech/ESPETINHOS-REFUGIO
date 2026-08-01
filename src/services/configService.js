@@ -4,7 +4,14 @@ import { db } from '../firebase';
 const refConfig = doc(db, 'configuracoes', 'geral');
 
 export function ouvirConfig(callback) {
-  return onSnapshot(refConfig, (snap) => callback(snap.exists() ? snap.data() : null));
+  return onSnapshot(
+    refConfig,
+    (snap) => callback(snap.exists() ? snap.data() : null),
+    (erro) => {
+      console.error('Erro ao carregar configurações:', erro);
+      callback(null);
+    },
+  );
 }
 
 export function salvarConfig(dados) {

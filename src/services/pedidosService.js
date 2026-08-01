@@ -21,7 +21,14 @@ export function criarPedido(pedido) {
 
 export function ouvirPedidos(callback) {
   const q = query(colecao, orderBy('criadoEm', 'desc'));
-  return onSnapshot(q, (snap) => callback(snap.docs.map((d) => ({ id: d.id, ...d.data() }))));
+  return onSnapshot(
+    q,
+    (snap) => callback(snap.docs.map((d) => ({ id: d.id, ...d.data() }))),
+    (erro) => {
+      console.error('Erro ao carregar pedidos:', erro);
+      callback([]);
+    },
+  );
 }
 
 export function atualizarStatusPedido(id, status) {

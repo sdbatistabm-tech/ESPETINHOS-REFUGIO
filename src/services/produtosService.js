@@ -9,12 +9,26 @@ const colecao = collection(db, 'produtos');
 
 export function ouvirProdutosAtivos(callback) {
   const q = query(colecao, where('ativo', '==', true), orderBy('ordem', 'asc'));
-  return onSnapshot(q, (snap) => callback(snap.docs.map((d) => ({ id: d.id, ...d.data() }))));
+  return onSnapshot(
+    q,
+    (snap) => callback(snap.docs.map((d) => ({ id: d.id, ...d.data() }))),
+    (erro) => {
+      console.error('Erro ao carregar produtos:', erro);
+      callback([]);
+    },
+  );
 }
 
 export function ouvirTodosProdutos(callback) {
   const q = query(colecao, orderBy('ordem', 'asc'));
-  return onSnapshot(q, (snap) => callback(snap.docs.map((d) => ({ id: d.id, ...d.data() }))));
+  return onSnapshot(
+    q,
+    (snap) => callback(snap.docs.map((d) => ({ id: d.id, ...d.data() }))),
+    (erro) => {
+      console.error('Erro ao carregar todos os produtos:', erro);
+      callback([]);
+    },
+  );
 }
 
 export function criarProduto(dados) {
